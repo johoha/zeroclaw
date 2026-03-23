@@ -15,7 +15,7 @@ default_temperature = 0.7
 port = ${ACTUAL_PORT}
 host = "[::]"
 allow_public_bind = true
-require_pairing = true
+require_pairing = false
 EOF
 
 exec zeroclaw daemon
