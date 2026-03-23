@@ -1,14 +1,21 @@
 #!/bin/sh
 set -e
 
-# อัปเดต port ใน config ให้ตรงกับที่ Railway กำหนด
 ACTUAL_PORT="${PORT:-42617}"
 
-sed -i "s/port = 42617/port = ${ACTUAL_PORT}/" /zeroclaw-data/.zeroclaw/config.toml
+# เขียน config ใหม่ทั้งหมดเลย แทนที่จะใช้ sed แก้
+cat > /zeroclaw-data/.zeroclaw/config.toml << EOF
+workspace_dir = "/zeroclaw-data/workspace"
+api_key = "${API_KEY}"
+default_provider = "${PROVIDER:-openrouter}"
+default_model = "${ZEROCLAW_MODEL:-anthropic/claude-sonnet-4-6}"
+default_temperature = 0.7
 
-# ใส่ API Key ถ้ามีการตั้งค่าไว้
-if [ -n "$API_KEY" ]; then
-  sed -i "s/api_key = \"\"/api_key = \"${API_KEY}\"/" /zeroclaw-data/.zeroclaw/config.toml
-fi
+[gateway]
+port = ${ACTUAL_PORT}
+host = "[::]"
+allow_public_bind = true
+require_pairing = false
+EOF
 
 exec zeroclaw daemon
