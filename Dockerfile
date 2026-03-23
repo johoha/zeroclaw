@@ -33,5 +33,6 @@ ENV ZEROCLAW_GATEWAY_PORT=42617
 WORKDIR /zeroclaw-data
 EXPOSE 42617
 
-ENTRYPOINT ["zeroclaw"]
-CMD ["daemon"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
